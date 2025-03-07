@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 from io import BytesIO
 
 # Streamlit UI
-st.title("CSV to Excel Attendance Processor")
+st.title("Clockify Attendance Calculator ")
 
 # File uploaders
 csv_file = st.file_uploader("Upload CSV File", type=["csv"])
@@ -73,7 +73,7 @@ if csv_file and attendance_file:
         # Provide download button
         st.download_button(label="Download Updated Excel File",
                            data=output_stream,
-                           file_name="Updated_Attendance.xlsx",
+                           file_name="f{attendance_file}",
                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
     except Exception as e:
