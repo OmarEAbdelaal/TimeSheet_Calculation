@@ -12,7 +12,7 @@ st.title("Clockify Attendance Calculator ")
 csv_file = st.file_uploader("Upload CSV File", type=["csv"])
 attendance_file = "Attendance.xlsx"
 
-if csv_file and attendance_file:
+if csv_file:
     try:
         # Load CSV data
         time_sheet = pd.read_csv(csv_file)
