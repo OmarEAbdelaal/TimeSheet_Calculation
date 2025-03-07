@@ -10,7 +10,7 @@ st.title("Clockify Attendance Calculator ")
 
 # File uploaders
 csv_file = st.file_uploader("Upload CSV File", type=["csv"])
-attendance_file = st.file_uploader("Upload Excel File", type=["xlsx"])
+attendance_file = "Attendance.xlsx"
 
 if csv_file and attendance_file:
     try:
