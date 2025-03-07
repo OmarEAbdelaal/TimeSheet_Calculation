@@ -73,7 +73,7 @@ if csv_file and attendance_file:
         # Provide download button
         st.download_button(label="Download Updated Excel File",
                            data=output_stream,
-                           file_name=f"{attendance_file}",
+                           file_name="Updated_Attendance.xlsx",
                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
     except Exception as e:
