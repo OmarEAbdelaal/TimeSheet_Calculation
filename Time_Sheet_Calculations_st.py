@@ -10,7 +10,8 @@ st.title("Clockify Attendance Calculator ")
 
 # File uploaders
 csv_file = st.file_uploader("Upload CSV File", type=["csv"])
-attendance_file = "Attendance.xlsx"
+current_dir = os.path.dirname(os.path.abspath(__file__))
+attendance_file = os.path.join(current_dir, "Attendance.xlsx")
 
 if csv_file:
     try:
@@ -42,7 +43,7 @@ if csv_file:
         unique_users = grouped_time_data['User'].unique()
 
         # Read the uploaded Excel file
-        attendance_bytes = BytesIO(attendance_file)
+        attendance_bytes = BytesIO(attendance_file.read())
         destination_workbook = load_workbook(attendance_bytes)
 
         for user in unique_users:
