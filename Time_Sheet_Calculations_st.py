@@ -10,7 +10,7 @@ st.title("CSV to Excel Attendance Processor")
 
 # File uploaders
 csv_file = st.file_uploader("Upload CSV File", type=["csv"])
-attendance_file = os.path.join(os.getcwd(), "Attendance.xlsx")
+attendance_file = "Attendance.xlsx"
 
 if csv_file and attendance_file:
     try:
@@ -42,8 +42,8 @@ if csv_file and attendance_file:
         unique_users = grouped_time_data['User'].unique()
 
         # Read the uploaded Excel file
-        attendance_bytes = BytesIO(attendance_file.read())
-        destination_workbook = load_workbook(attendance_bytes)
+        #attendance_bytes = BytesIO(attendance_file.read())
+        destination_workbook = load_workbook(attendance_file)
 
         for user in unique_users:
             user_time_data = grouped_time_data[grouped_time_data['User'] == user]
