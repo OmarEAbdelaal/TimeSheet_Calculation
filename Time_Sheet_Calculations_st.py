@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 from io import BytesIO
 
 # Streamlit UI
-st.title("CSV to Excel Attendance Processor")
+st.title("Attendance Clockify Calculator")
 
 # File uploaders
 csv_file = st.file_uploader("Upload CSV File", type=["csv"])
