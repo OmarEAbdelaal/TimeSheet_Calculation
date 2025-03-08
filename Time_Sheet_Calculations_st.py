@@ -1,8 +1,15 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
+import pandas as pd
 import os
+from sqlalchemy import create_engine, text # Importing the SQL interface.
+from scipy.stats import ttest_ind
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime, timedelta
 from openpyxl import load_workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import NamedStyle
 from io import BytesIO
 
 # Streamlit UI
@@ -40,6 +47,33 @@ if csv_file and attendance_file:
         }).reset_index()
 
         unique_users = grouped_time_data['User'].unique()
+        
+        # Extract Year and Month from 'Start Date'
+        Year = int(grouped_time_data['Start Date'].dt.year.unique()[0])
+        Month = int(grouped_time_data['Start Date'].dt.month.unique()[0])
+        
+        # Calculating the working hours per month
+        def calculate_working_days(year, month):
+            # Generate all dates in the given month
+            start_date = datetime(year, month, 1)
+            if month == 12:
+                end_date = datetime(year + 1, 1, 1) - timedelta(days=1)
+            else:
+                end_date = datetime(year, month + 1, 1) - timedelta(days=1)
+        
+            # Create a date range
+            date_range = pd.date_range(start=start_date, end=end_date, freq='D')
+        
+            # Exclude Fridays (4) and Saturdays (5)
+            working_days = [date for date in date_range if date.weekday() not in [4, 5]]
+        
+            return len(working_days)
+        
+        # Example Usage
+        working_days_count = calculate_working_days(Year, Month)
+        working_hours_per_month = working_days_count * 9
+        time_format = timedelta(hours=working_hours_per_month)
+
 
         # Read the uploaded Excel file
         #attendance_bytes = BytesIO(attendance_file.read())
@@ -62,6 +96,8 @@ if csv_file and attendance_file:
                 for i, row in enumerate(merged_df.itertuples(index=False), start=2):
                     for j, value in enumerate(row, start=1):
                         destination_sheet.cell(row=i, column=j, value=value)
+                        # Copy working hours into cell B33
+                        destination_sheet["B33"].value = time_format
 
         # Save the updated Excel file
         output_stream = BytesIO()
