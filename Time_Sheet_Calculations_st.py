@@ -111,7 +111,7 @@ if csv_file and attendance_file:
         # Provide download button
         st.download_button(label="Download Updated Excel File",
                            data=output_stream,
-                           file_name="f{Month_str}._Attendance.xlsx",
+                           file_name=f"{Month_str}._Attendance.xlsx",
                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
     except Exception as e:
