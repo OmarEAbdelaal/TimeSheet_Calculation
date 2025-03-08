@@ -7,4 +7,3 @@ matplotlib
 seaborn
 sqlalchemy
 datetime
-calendar
