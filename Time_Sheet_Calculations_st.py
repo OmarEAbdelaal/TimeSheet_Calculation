@@ -43,7 +43,7 @@ if csv_file:
         unique_users = grouped_time_data['User'].unique()
 
         # Read the uploaded Excel file
-        attendance_bytes = BytesIO(attendance_file.read())
+        attendance_bytes = BytesIO(attendance_file)
         destination_workbook = load_workbook(attendance_bytes)
 
         for user in unique_users:
