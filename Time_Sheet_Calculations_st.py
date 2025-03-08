@@ -6,14 +6,13 @@ from openpyxl import load_workbook
 from io import BytesIO
 
 # Streamlit UI
-st.title("Clockify Attendance Calculator ")
+st.title("CSV to Excel Attendance Processor")
 
 # File uploaders
 csv_file = st.file_uploader("Upload CSV File", type=["csv"])
-current_dir = os.path.dirname(os.path.abspath(__file__))
-attendance_file = os.path.join(current_dir, "Attendance.xlsx")
+attendance_file = st.file_uploader("Upload Excel File", type=["xlsx"])
 
-if csv_file:
+if csv_file and attendance_file:
     try:
         # Load CSV data
         time_sheet = pd.read_csv(csv_file)
@@ -43,7 +42,7 @@ if csv_file:
         unique_users = grouped_time_data['User'].unique()
 
         # Read the uploaded Excel file
-        attendance_bytes = BytesIO(attendance_file)
+        attendance_bytes = BytesIO(attendance_file.read())
         destination_workbook = load_workbook(attendance_bytes)
 
         for user in unique_users:
