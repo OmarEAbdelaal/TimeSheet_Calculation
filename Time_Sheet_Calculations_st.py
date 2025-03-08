@@ -11,6 +11,7 @@ from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import NamedStyle
 from io import BytesIO
+import calendar
 
 # Streamlit UI
 st.title("Attendance Clockify Calculator")
@@ -51,6 +52,7 @@ if csv_file and attendance_file:
         # Extract Year and Month from 'Start Date'
         Year = int(grouped_time_data['Start Date'].dt.year.unique()[0])
         Month = int(grouped_time_data['Start Date'].dt.month.unique()[0])
+        Month_str = calendar.month_abbr[Month]
         
         # Calculating the working hours per month
         def calculate_working_days(year, month):
@@ -109,7 +111,7 @@ if csv_file and attendance_file:
         # Provide download button
         st.download_button(label="Download Updated Excel File",
                            data=output_stream,
-                           file_name="Updated_Attendance.xlsx",
+                           file_name="f{Month_str}._Attendance.xlsx",
                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
     except Exception as e:
