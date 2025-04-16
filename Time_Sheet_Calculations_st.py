@@ -82,16 +82,6 @@ if csv_file and attendance_file:
         destination_workbook = load_workbook()
 
         for user in unique_users:
-            # Get the Last worksheet
-            last_sheet = destination_workbook.worksheets[-1]
-
-            # Rename the first worksheet
-            last_sheet.title = f"{user}"
-
-            # Duplicate the renamed sheet
-            copied_sheet = destination_workbook.copy_worksheet(last_sheet)
-            copied_sheet.title = "Template"
-            
             user_time_data = grouped_time_data[grouped_time_data['User'] == user]
             date_range = pd.date_range(start=user_time_data['Start Date'].min(), end=user_time_data['Start Date'].max(), freq='D')
             user_date_range_df = pd.DataFrame({'Start Date': date_range})
@@ -104,6 +94,15 @@ if csv_file and attendance_file:
             # If sheet exists in destination workbook, update it
             if user in destination_workbook.sheetnames:
                 destination_sheet = destination_workbook[user]
+                # Get the Last worksheet
+                last_sheet = destination_workbook.worksheets[-1]
+
+                # Rename the first worksheet
+                last_sheet.title = f"{user}"
+
+                # Duplicate the renamed sheet
+                copied_sheet = destination_workbook.copy_worksheet(last_sheet)
+                copied_sheet.title = "Template"
 
                 for i, row in enumerate(merged_df.itertuples(index=False), start=2):
                     for j, value in enumerate(row, start=1):
