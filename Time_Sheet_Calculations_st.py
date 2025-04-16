@@ -78,7 +78,7 @@ if csv_file and attendance_file:
 
 
         # Read the uploaded Excel file
-        #attendance_bytes = BytesIO(attendance_file.read())
+        attendance_bytes = BytesIO(attendance_file.read())
         destination_workbook = load_workbook()
 
         for user in unique_users:
@@ -102,7 +102,7 @@ if csv_file and attendance_file:
             # Duplicate the renamed sheet
             copied_sheet = destination_workbook.copy_worksheet(last_sheet)
             copied_sheet.title = "Template"
-            
+
             if user in destination_workbook.sheetnames:
                 destination_sheet = destination_workbook[user]
 
