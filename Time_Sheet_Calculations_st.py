@@ -78,8 +78,8 @@ if csv_file and attendance_file:
 
 
         # Read the uploaded Excel file
-        attendance_bytes = BytesIO(attendance_file.read())
-        destination_workbook = load_workbook()
+        #attendance_bytes = BytesIO(attendance_file.read())
+        destination_workbook = load_workbook(attendance_file)
 
         for user in unique_users:
             
