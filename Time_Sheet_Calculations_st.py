@@ -79,9 +79,19 @@ if csv_file and attendance_file:
 
         # Read the uploaded Excel file
         #attendance_bytes = BytesIO(attendance_file.read())
-        destination_workbook = load_workbook(attendance_file)
+        destination_workbook = load_workbook()
 
         for user in unique_users:
+            # Get the Last worksheet
+            last_sheet = destination_workbook.worksheets[-1]
+
+            # Rename the first worksheet
+            last_sheet.title = f"{user}"
+
+            # Duplicate the renamed sheet
+            copied_sheet = destination_workbook.copy_worksheet(last_sheet)
+            copied_sheet.title = "Template"
+            
             user_time_data = grouped_time_data[grouped_time_data['User'] == user]
             date_range = pd.date_range(start=user_time_data['Start Date'].min(), end=user_time_data['Start Date'].max(), freq='D')
             user_date_range_df = pd.DataFrame({'Start Date': date_range})
