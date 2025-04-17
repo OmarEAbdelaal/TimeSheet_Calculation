@@ -94,14 +94,14 @@ if csv_file and attendance_file:
 
             # If sheet exists in destination workbook, update it
             # Get the Last worksheet
-            last_sheet = destination_workbook.worksheets[user]
+            last_sheet = destination_workbook.worksheets[-1]
 
             # Rename the first worksheet
             last_sheet.title = f"{user}"
 
             # Duplicate the renamed sheet
-            #copied_sheet = destination_workbook.copy_worksheet(last_sheet)
-            #copied_sheet.title = "Template"
+            copied_sheet = destination_workbook.copy_worksheet(last_sheet)
+            copied_sheet.title = "Template"
 
             if user in destination_workbook.sheetnames:
                 destination_sheet = destination_workbook[user]
