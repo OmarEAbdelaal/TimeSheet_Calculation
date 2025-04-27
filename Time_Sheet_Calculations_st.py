@@ -82,7 +82,7 @@ if csv_file and attendance_file:
         destination_workbook = load_workbook(attendance_file)
         template_sheets = destination_workbook.sheetnames.copy()  # Copy list to manage template sheets
 
-        for idx, user in enumerate(unique_users):
+        for idx, user in unique_users:
             if idx < len(template_sheets):
                 sheet_to_use = template_sheets[idx]
         
