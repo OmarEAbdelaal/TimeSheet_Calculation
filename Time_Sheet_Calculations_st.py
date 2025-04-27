@@ -80,38 +80,43 @@ if csv_file and attendance_file:
         # Read the uploaded Excel file
         #attendance_bytes = BytesIO(attendance_file.read())
         destination_workbook = load_workbook(attendance_file)
+        template_sheets = destination_workbook.sheetnames.copy()  # Copy list to manage template sheets
 
-        for user in unique_users:
-            
-            user_time_data = grouped_time_data[grouped_time_data['User'] == user]
-            date_range = pd.date_range(start=user_time_data['Start Date'].min(), end=user_time_data['Start Date'].max(), freq='D')
-            user_date_range_df = pd.DataFrame({'Start Date': date_range})
+        for idx, user in enumerate(unique_users):
+            if idx < len(template_sheets):
+                sheet_to_use = template_sheets[idx]
+        
+                # Rename the template sheet to the user's name
+                destination_sheet = destination_workbook[sheet_to_use]
+                destination_sheet.title = user
+                
+                # Prepare user data
+                user_time_data = grouped_time_data[grouped_time_data['User'] == user]
+                date_range = pd.date_range(start=user_time_data['Start Date'].min(), end=user_time_data['Start Date'].max(), freq='D')
+                user_date_range_df = pd.DataFrame({'Start Date': date_range})
+    
+                merged_df = pd.merge(user_date_range_df, user_time_data, on='Start Date', how='left')
+                merged_df['User'].fillna(user, inplace=True)
+                merged_df.drop(columns=['User'], inplace=True)
+                merged_df.replace(0, '', inplace=True)
 
-            merged_df = pd.merge(user_date_range_df, user_time_data, on='Start Date', how='left')
-            merged_df['User'].fillna(user, inplace=True)
-            merged_df.drop(columns=['User'], inplace=True)
-            merged_df.replace(0, '', inplace=True)
-
-            # If sheet exists in destination workbook, update it
-            # Get the Last worksheet
-            last_sheet = destination_workbook.worksheets[-1]
-
-            # Rename the first worksheet
-            last_sheet.title = f"{user}"
-
-            # Duplicate the renamed sheet
-            copied_sheet = destination_workbook.copy_worksheet(last_sheet)
-            copied_sheet.title = "Template"
-
-            if user in destination_workbook.sheetnames:
-                destination_sheet = destination_workbook[user]
-
+                # Write user data to the renamed sheet
                 for i, row in enumerate(merged_df.itertuples(index=False), start=2):
                     for j, value in enumerate(row, start=1):
                         destination_sheet.cell(row=i, column=j, value=value)
                         # Copy working hours into cell B33
                         destination_sheet["B33"].value = time_format
+            else:
+            st.error("Not enough template sheets for all users!")
+            break
 
+        # After filling users, delete any remaining unused template sheets
+        remaining_templates = template_sheets[len(unique_users):]
+        
+        for sheet_name in remaining_templates:
+            std = destination_workbook[sheet_name]
+            destination_workbook.remove(std)
+            
         # Save the updated Excel file
         output_stream = BytesIO()
         destination_workbook.save(output_stream)
