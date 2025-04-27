@@ -106,9 +106,9 @@ if csv_file and attendance_file:
                         destination_sheet.cell(row=i, column=j, value=value)
                         # Copy working hours into cell B33
                         destination_sheet["B33"].value = time_format
-            else:
-            st.error("Not enough template sheets for all users!")
-            break
+            #else:
+            #st.error("Not enough template sheets for all users!")
+            #break
 
         # After filling users, delete any remaining unused template sheets
         remaining_templates = template_sheets[len(unique_users):]
